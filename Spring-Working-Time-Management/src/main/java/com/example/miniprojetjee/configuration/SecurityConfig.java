@@ -1,14 +1,14 @@
-package com.example.miniprojetjee.config;
+package com.example.miniprojetjee.configuration;
 
-import com.example.miniprojetjee.Repository.EmployeeRepo;
+import com.example.miniprojetjee.repository.EmployeeRepo;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -31,6 +31,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private final EmployeeRepo repository;
@@ -55,7 +56,7 @@ public class SecurityConfig {
         return  httpSecurity
                 .sessionManagement(sm->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(csrf->csrf.disable())
-                 .cors(Customizer.withDefaults())
+                .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(ar->ar.requestMatchers("/auth/login/**").permitAll())
                 .authorizeHttpRequests(ar->ar.anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())

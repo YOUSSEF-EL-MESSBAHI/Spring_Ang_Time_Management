@@ -19,20 +19,21 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+
 public class Employee implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String firstName;
     private String lastName;
     private String email;
     private String jobTitle;
     private String phone;
-    @OneToMany(mappedBy = "employee")
-    private List<Work> works;
-
     private String password;
     private String roles;
+    @OneToMany(mappedBy = "employee",fetch = FetchType.EAGER)
+     private List<Work> works;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = Arrays.stream(roles.split(","))
